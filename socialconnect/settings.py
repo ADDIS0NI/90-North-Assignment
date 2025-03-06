@@ -25,7 +25,11 @@ SECRET_KEY = 'django-insecure-67y#7zq=&_-(5-)g!hc=!-w#bram8a-v39l&ff3#aj8=w()v-p
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com']
+ALLOWED_HOSTS = [
+    'localhost', 
+    '127.0.0.1', 
+    'nine0-north-assignment-jo2o.onrender.com'
+]
 
 
 # Application definition
@@ -186,4 +190,6 @@ LOGIN_URL = 'login'              # Where to go if login required
 LOGOUT_REDIRECT_URL = 'home'     # Where to go after logout
 
 
-CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com']
+CSRF_TRUSTED_ORIGINS = [
+    'https://nine0-north-assignment-jo2o.onrender.com'
+]

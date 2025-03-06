@@ -15,9 +15,9 @@ class ChatManager {
 
     connectWebSocket() {
         console.log("Attempting to connect to WebSocket...");
-        
+        const wsScheme = window.location.protocol === "https:" ? "wss://" : "ws://";
         this.socket = new WebSocket(
-            'ws://' + window.location.host + '/ws/chat/'
+            wsScheme + window.location.host + '/ws/chat/'
         );
 
         this.socket.onopen = () => this.handleOpen();
