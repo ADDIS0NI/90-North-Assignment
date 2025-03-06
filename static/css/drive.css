@@ -1,0 +1,77 @@
+/* Drive home styles */
+.drive-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 20px;
+}
+
+.drive-actions {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.upload-section, .files-section {
+    margin: 20px 0;
+    padding: 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+}
+
+/* File list styles */
+.file-list-container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 20px;
+}
+
+.files-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.files-table th,
+.files-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.file-type {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: #f0f0f0;
+    font-size: 12px;
+    color: #666;
+}
+
+.actions {
+    white-space: nowrap;
+}
+
+/* Progress bar styles */
+.progress-container {
+    margin-top: 10px;
+    width: 150px;
+}
+
+.progress-bar {
+    height: 8px;
+    background: #f0f0f0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress {
+    width: 0%;
+    height: 100%;
+    background: #4CAF50;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    font-size: 12px;
+    text-align: center;
+    margin-top: 4px;
+}

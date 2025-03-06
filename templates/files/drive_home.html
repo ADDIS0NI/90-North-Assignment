@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="drive-container">
+    <h1>Google Drive Management</h1>
+
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if drive_connected %}
+        <div class="drive-actions">
+            <h2>Your Drive is Connected!</h2>
+            
+            <div class="upload-section">
+                <h3>Upload New File</h3>
+                <form action="{% url 'upload_file' %}" method="post" enctype="multipart/form-data" class="upload-form">
+                    {% csrf_token %}
+                    <div class="file-input">
+                        <input type="file" name="file" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Upload to Drive</button>
+                </form>
+            </div>
+
+            <div class="files-section">
+                <h3>Your Files</h3>
+                <a href="{% url 'file_list' %}" class="btn btn-secondary">View All Files</a>
+            </div>
+        </div>
+    {% else %}
+        <div class="connect-section">
+            <p>Connect your Google Drive to start managing files</p>
+            <a href="{% url 'connect_drive' %}" class="btn btn-primary">Connect Drive</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

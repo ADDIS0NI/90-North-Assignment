@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="file-list-container">
+    <h2>Your Drive Files</h2>
+
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if files %}
+    <div class="files-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Modified</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for file in files %}
+                <tr>
+                    <td>
+                        <span class="file-type">
+                            {% if 'image' in file.mimeType %}Image
+                            {% elif 'pdf' in file.mimeType %}PDF
+                            {% elif 'spreadsheet' in file.mimeType %}Spreadsheet
+                            {% elif 'document' in file.mimeType %}Document
+                            {% elif 'presentation' in file.mimeType %}Presentation
+                            {% else %}File{% endif %}
+                        </span>
+                    </td>
+                    <td>{{ file.name }}</td>
+                    <td>{{ file.modifiedTime|slice:":10" }}</td>
+                    <td class="actions">
+                        {% if 'google-apps' in file.mimeType %}
+                        <a href="{{ file.webViewLink }}" target="_blank" class="btn btn-sm btn-primary">Preview</a>
+                        {% endif %}
+                        <button class="btn btn-sm btn-success download-btn" 
+                                data-file-id="{{ file.id }}"
+                                data-filename="{{ file.name }}">
+                            Download
+                        </button>
+                        <div class="progress-container" style="display: none;">  <!-- Initially hidden -->
+                            <div class="progress-bar">
+                                <div class="progress"></div>
+                            </div>
+                            <div class="progress-text">0%</div>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>No files found in your Drive.</p>
+    {% endif %}
+</div>
+
+
+
+{% endblock %}

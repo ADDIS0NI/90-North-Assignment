@@ -1,0 +1,12 @@
+*.pyc
+__pycache__/
+db.sqlite3
+.env
+venv/
+env/
+.vscode/
+client_secrets.json
+staticfiles/
+.DS_Store
+*.env
+secrets/
