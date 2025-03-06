@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-67y#7zq=&_-(5-)g!hc=!-w#bram8a-v39l&ff3#aj8=w()v-p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com']
 
 
 # Application definition
@@ -133,7 +133,7 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
-STATIC_ROOT = BASE_DIR / 'staticfiles'  # This is where collectstatic will put files
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # This is where collectstatic will put files
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -159,3 +159,6 @@ AUTHENTICATION_BACKENDS = [
 LOGIN_REDIRECT_URL = 'dashboard'  # Where to go after login
 LOGIN_URL = 'login'              # Where to go if login required
 LOGOUT_REDIRECT_URL = 'home'     # Where to go after logout
+
+
+CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com']
