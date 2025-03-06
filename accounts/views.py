@@ -31,10 +31,9 @@ def login_view(request):
 def google_login(request):
     logger.info("Initiating Google login process")
     try:
-        flow = Flow.from_client_secrets_file(
-            'client_secrets.json',
-            scopes=SCOPES,
-            redirect_uri='http://localhost:8000/accounts/google/callback/'
+        flow = Flow.from_client_config(
+            settings.GOOGLE_CONFIG,
+            scopes=SCOPES
         )
         
         authorization_url, state = flow.authorization_url(
@@ -54,11 +53,10 @@ def google_callback(request):
     try:
         state = request.session.get('google_auth_state')
         
-        flow = Flow.from_client_secrets_file(
-            'client_secrets.json',
+        flow = Flow.from_client_config(
+            settings.GOOGLE_CONFIG,
             scopes=SCOPES,
-            state=state,
-            redirect_uri='http://localhost:8000/accounts/google/callback/'
+            state=state
         )
         
         flow.fetch_token(

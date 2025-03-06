@@ -141,7 +141,7 @@ if not DEBUG:
     MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-    
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
@@ -152,9 +152,14 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Add these settings
-GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
-GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET')
+
+GOOGLE_CONFIG = {
+    "web": {
+        "client_id": os.getenv('GOOGLE_CLIENT_ID'),
+        "client_secret": os.getenv('GOOGLE_CLIENT_SECRET'),
+        "redirect_uris": ["https://nine0-north-assignment-jo2o.onrender.com/accounts/google/callback/"]
+    }
+}
 
 # Add authentication backends
 AUTHENTICATION_BACKENDS = [
