@@ -156,11 +156,11 @@ load_dotenv()
 GOOGLE_CONFIG = {
     "web": {
         "client_id": os.getenv('GOOGLE_CLIENT_ID'),
-        "project_id": os.getenv('GOOGLE_PROJECT_ID'),  
+        "client_secret": os.getenv('GOOGLE_CLIENT_SECRET'),
+        "project_id": os.getenv('GOOGLE_PROJECT_ID'),
         "auth_uri": "https://accounts.google.com/o/oauth2/auth",
         "token_uri": "https://oauth2.googleapis.com/token",
         "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-        "client_secret": os.getenv('GOOGLE_CLIENT_SECRET'),
         "redirect_uris": [
             "https://nine0-north-assignment-jo2o.onrender.com/accounts/google/callback/",
             "http://localhost:8000/accounts/google/callback/"
