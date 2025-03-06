@@ -33,7 +33,8 @@ def google_login(request):
     try:
         flow = Flow.from_client_config(
             settings.GOOGLE_CONFIG,
-            scopes=SCOPES
+            scopes=SCOPES,
+            redirect_uri=settings.GOOGLE_CONFIG['web']['redirect_uris'][0]  # Add this line
         )
         
         authorization_url, state = flow.authorization_url(
@@ -56,7 +57,8 @@ def google_callback(request):
         flow = Flow.from_client_config(
             settings.GOOGLE_CONFIG,
             scopes=SCOPES,
-            state=state
+            state=state,
+            redirect_uri=settings.GOOGLE_CONFIG['web']['redirect_uris'][0]
         )
         
         flow.fetch_token(
