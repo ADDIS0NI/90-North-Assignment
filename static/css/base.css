@@ -105,3 +105,13 @@ nav {
     color: #666;
     margin-bottom: 30px;
 }
+
+/* Add this to your existing base.css */
+.user-email {
+    color: #fff;
+    margin-right: 15px;
+    font-weight: bold;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 5px 10px;
+    border-radius: 4px;
+}
