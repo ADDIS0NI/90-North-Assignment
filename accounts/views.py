@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
 import logging
+import secrets
 
 logger = logging.getLogger(__name__)
 
@@ -25,6 +26,15 @@ SCOPES = [
 ]
 
 def login_view(request):
+    # Clear any existing state and ensure a fresh session
+    if 'oauth_state' in request.session:
+        del request.session['oauth_state']
+    
+    # Generate a new state parameter
+    state = secrets.token_urlsafe(32)
+    request.session['oauth_state'] = state
+    request.session.modified = True
+    
     logger.info("Login page accessed")
     return render(request, 'accounts/login.html')
 
