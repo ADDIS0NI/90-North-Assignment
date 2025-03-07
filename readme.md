@@ -146,6 +146,8 @@ The chat feature uses Django Channels to:
 - Direct messaging between users
 - Enhanced file management (folders, search)
 - Real-time file collaboration
-
 ## Contact
 For any questions or access requests, please contact me at adityasoni0950@gmail.com.
+
+# I sincerely apologize for the delayed submission of my assignment. Due to time constraints, I prioritized the backend development while ensuring the project maintained its core design aesthetics. I have put in my best  effort to deliver a high-quality solution.
+# I would greatly appreciate your feedback on my work, as I am eager to improve and contribute further. Additionally, I am highly interested in this internship with a potential job offer and look forward to any guidance on #how I can enhance my performance.
