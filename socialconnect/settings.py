@@ -47,12 +47,16 @@ INSTALLED_APPS = [
     'chat',
     'files',
     
+    'daphne',  # Add this before django.contrib.staticfiles
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -221,3 +225,11 @@ if IS_PRODUCTION:
     CSRF_TRUSTED_ORIGINS = ['https://nine0-north-assignment-jo2o.onrender.com']
 else:
     CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://127.0.0.1:8000']
+
+# Add Channels configuration
+ASGI_APPLICATION = 'socialconnect.asgi.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
