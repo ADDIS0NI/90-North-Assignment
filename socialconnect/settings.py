@@ -17,6 +17,8 @@ from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Move load_dotenv() to the top of the file, before any environment variables are accessed
+load_dotenv()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -41,11 +43,10 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
-    'daphne',
     'accounts',
     'chat',
     'files',
-    'channels',
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -85,8 +86,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'socialconnect.wsgi.application'
 
 
-# Add Channels configuration
-ASGI_APPLICATION = 'socialconnect.asgi.application'
+
 
 if IS_PRODUCTION:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -101,16 +101,7 @@ else:
     CSRF_COOKIE_SECURE = False
     ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
-# Channel layers for WebSocket
-# WebSocket configuration based on environment
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer",
-        "CONFIG": {
-            "ssl_cert_reqs": None if IS_PRODUCTION else None,
-        },
-    }
-}
+
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -167,6 +158,10 @@ STATICFILES_DIRS = [
 if not DEBUG:
     MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
 
 
 # Default primary key field type
@@ -176,15 +171,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 
-load_dotenv()
+# Define these variables explicitly in settings
+GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
+GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET')
+GOOGLE_PROJECT_ID = os.getenv('GOOGLE_PROJECT_ID')
 
-
-
+# Then use them in your GOOGLE_CONFIG
 GOOGLE_CONFIG = {
     "web": {
-        "client_id": os.getenv('GOOGLE_CLIENT_ID'),
-        "client_secret": os.getenv('GOOGLE_CLIENT_SECRET'),
-        "project_id": os.getenv('GOOGLE_PROJECT_ID'),
+        "client_id": GOOGLE_CLIENT_ID,
+        "client_secret": GOOGLE_CLIENT_SECRET,
+        "project_id": GOOGLE_PROJECT_ID,
         "auth_uri": "https://accounts.google.com/o/oauth2/auth",
         "token_uri": "https://oauth2.googleapis.com/token",
         "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
@@ -197,18 +194,30 @@ GOOGLE_CONFIG = {
     }
 }
 
-# Add authentication backends
+# Fix the authentication backends order and ensure they're properly configured
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'accounts.authentication.GoogleAuthBackend',
+    'django.contrib.auth.backends.ModelBackend',  # Default Django auth
+    'accounts.authentication.GoogleAuthBackend',  # Your custom Google auth
 ]
 
 
-LOGIN_REDIRECT_URL = 'dashboard'  # Where to go after login
-LOGIN_URL = 'login'              # Where to go if login required
-LOGOUT_REDIRECT_URL = 'home'     # Where to go after logout
+# Make sure these URLs are correctly defined
+LOGIN_REDIRECT_URL = 'dashboard'  # Ensure this view exists and is accessible
+LOGIN_URL = 'login'              
+LOGOUT_REDIRECT_URL = 'home'     
 
+# Ensure session configuration is correct
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Default, but explicitly set
+SESSION_COOKIE_AGE = 1209600  # 2 weeks in seconds
+SESSION_COOKIE_SECURE = IS_PRODUCTION  # Only use secure cookies in production
+SESSION_COOKIE_HTTPONLY = True  # Prevent JavaScript access to session cookie
+SESSION_COOKIE_SAMESITE = 'Lax'  # Provides some CSRF protection
 
-CSRF_TRUSTED_ORIGINS = [
-    'https://nine0-north-assignment-jo2o.onrender.com'
-]
+# Ensure CSRF settings are consistent
+CSRF_USE_SESSIONS = True  # Store CSRF token in the session instead of a cookie
+CSRF_COOKIE_SECURE = IS_PRODUCTION
+CSRF_COOKIE_HTTPONLY = True
+if IS_PRODUCTION:
+    CSRF_TRUSTED_ORIGINS = ['https://nine0-north-assignment-jo2o.onrender.com']
+else:
+    CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://127.0.0.1:8000']
