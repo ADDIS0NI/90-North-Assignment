@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 
+from dotenv import load_dotenv
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -22,8 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-67y#7zq=&_-(5-)g!hc=!-w#bram8a-v39l&ff3#aj8=w()v-p'
 
+# Get environment
+ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
+IS_PRODUCTION = ENVIRONMENT == 'production'
+
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = not IS_PRODUCTION
 
 ALLOWED_HOSTS = [
     'localhost', 
@@ -82,10 +88,27 @@ WSGI_APPLICATION = 'socialconnect.wsgi.application'
 # Add Channels configuration
 ASGI_APPLICATION = 'socialconnect.asgi.application'
 
+if IS_PRODUCTION:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    ALLOWED_HOSTS = ['nine0-north-assignment-jo2o.onrender.com']
+    CSRF_TRUSTED_ORIGINS = ['https://nine0-north-assignment-jo2o.onrender.com']
+else:
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
 # Channel layers for WebSocket
+# WebSocket configuration based on environment
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"  
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+        "CONFIG": {
+            "ssl_cert_reqs": None if IS_PRODUCTION else None,
+        },
     }
 }
 
@@ -151,13 +174,11 @@ if not DEBUG:
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-import os
-from dotenv import load_dotenv
+
 
 load_dotenv()
 
-GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
-GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET')
+
 
 GOOGLE_CONFIG = {
     "web": {
@@ -168,12 +189,10 @@ GOOGLE_CONFIG = {
         "token_uri": "https://oauth2.googleapis.com/token",
         "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
         "redirect_uris": [
-            "https://nine0-north-assignment-jo2o.onrender.com/accounts/google/callback/",
-            "http://localhost:8000/accounts/google/callback/"
+            "https://nine0-north-assignment-jo2o.onrender.com/accounts/google/callback/" if IS_PRODUCTION else "http://localhost:8000/accounts/google/callback/"
         ],
         "javascript_origins": [
-            "https://nine0-north-assignment-jo2o.onrender.com",
-            "http://localhost:8000"
+            "https://nine0-north-assignment-jo2o.onrender.com" if IS_PRODUCTION else "http://localhost:8000"
         ]
     }
 }

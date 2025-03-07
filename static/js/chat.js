@@ -16,14 +16,31 @@ class ChatManager {
     connectWebSocket() {
         console.log("Attempting to connect to WebSocket...");
         
-        this.socket = new WebSocket(
-            'ws://' + window.location.host + '/ws/chat/'
-        );
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const wsUrl = `${protocol}//${window.location.host}/ws/chat/`;
+        console.log(`Connecting to WebSocket at: ${wsUrl}`);
+        
+        this.socket = new WebSocket(wsUrl);
     
-        this.socket.onopen = () => this.handleOpen();
-        this.socket.onmessage = (e) => this.handleMessage(e);
-        this.socket.onclose = (e) => this.handleClose(e);
-        this.socket.onerror = (e) => this.handleError(e);
+        this.socket.onopen = () => {
+            console.log("WebSocket connection established!");
+            this.handleOpen();
+        };
+    
+        this.socket.onerror = (error) => {
+            console.error("WebSocket error:", error);
+            this.handleError(error);
+        };
+    
+        this.socket.onclose = (event) => {
+            console.log("WebSocket closed:", event);
+            this.handleClose(event);
+        };
+    
+        this.socket.onmessage = (event) => {
+            console.log("WebSocket message received");
+            this.handleMessage(event);
+        };
     }
 
     handleOpen() {
